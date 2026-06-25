@@ -1,120 +1,259 @@
-# 📋 Production Slip Management System
+# 📊 Multi-Company Production Management System
 
-A modern React application for managing and tracking production slips in real-time.
+A professional, scalable production management platform that serves multiple companies with complete data isolation. Built with React 19 and Firebase.
 
-## Features
+## 🎯 Key Features
 
-✅ **Add Production Slips** - Create new production records with product details, quantities, and operator information
-✅ **Edit Records** - Update production slip information on the fly
-✅ **Delete Records** - Remove completed or incorrect records
-✅ **Status Tracking** - Track production status (In Progress, Completed, On Hold, Cancelled)
-✅ **Statistics** - View quick statistics about production slips
-✅ **Responsive Design** - Works seamlessly on desktop, tablet, and mobile devices
-✅ **Modern UI** - Beautiful gradient interface with smooth animations
+### Multi-Tenant Architecture
+- ✅ Support unlimited companies
+- ✅ Complete data isolation per company
+- ✅ Company-specific dashboards and reports
+- ✅ Seamless company switching
+- ✅ Scalable Firestore structure
 
-## Tech Stack
+### 6 User Roles with Granular Permissions
 
-- **React 18** - UI framework
-- **React Scripts** - Build tool
-- **CSS3** - Styling with gradients and animations
+| Role | Permissions |
+|------|-------------|
+| **Super Admin** | Manage all companies, view all data, system administration |
+| **Company Admin** | Manage company users, employees, and settings |
+| **Supervisor** | Create & manage batches, add products & employees |
+| **Ops Head** | Full access to company operations |
+| **Quality Check** | View batches, download reports |
+| **Worker** | Update production data, set timings |
 
-## Installation
+### 5 Core Screens
 
+1. **Dashboard** - Real-time KPIs and batch overview
+   - Total/Running/Completed batches
+   - Total products and employees
+   - Today's batch count
+   - Recent batches table
+
+2. **Batches** - Production batch management
+   - Create new batches (TABLE01-05)
+   - Assign multiple SKUs per batch
+   - Assign multiple workers
+   - Track start/end times per SKU
+   - Status updates (Pending, Running, Completed)
+   - Filter by status
+
+3. **Products (SKUs)** - Product catalog
+   - Add/Edit/Delete SKUs
+   - SKU codes and product names
+   - Company-specific catalog
+
+4. **Employees** - Workforce management
+   - Add/Edit/Delete employees
+   - Department assignment
+   - Company-specific workforce
+
+5. **Reports & Analytics** - Excel export
+   - Production Report (Batch | Date | Status | SKU | Times | Qty | Workers)
+   - Employee Performance Report (Name | Dept | Total Batches | Status)
+   - Download history tracking
+
+6. **Company Management** (Super Admin only)
+   - Create new companies
+   - Manage company administrators
+   - View company statistics
+   - User access control
+
+### Authentication
+- ✅ Email/Password with JWT
+- ✅ Google Sign-In (OAuth)
+- ✅ 7-day session persistence
+- ✅ Company assignment on signup
+
+### Design
+- ✅ Professional blue accent color (#0055FF)
+- ✅ Responsive mobile-first design
+- ✅ Color-coded status (🟡 Pending, 🔵 Running, 🟢 Completed)
+- ✅ TailwindCSS + modern UI
+- ✅ Monospace fonts for technical IDs
+
+## 🏗️ Data Model
+
+```
+Firestore Structure:
+
+companies/
+  ├── {companyId}
+  │   ├── name: "Company Name"
+  │   ├── industry: "Manufacturing"
+  │   ├── createdAt: timestamp
+  │   ├── batches/
+  │   │   └── {batchId}
+  │   │       ├── tableNumber: "TABLE01"
+  │   │       ├── date: "2026-06-25"
+  │   │       ├── status: "Running"
+  │   │       ├── products: [{skuCode, targetQty, actualQty, startTime, endTime}]
+  │   │       └── workers: [{workerId, name, department}]
+  │   ├── products/
+  │   │   └── {productId}
+  │   │       ├── skuCode: "7R-PCH"
+  │   │       └── productName: "7-Ring Pouch"
+  │   └── employees/
+  │       └── {employeeId}
+  │           ├── name: "John Doe"
+  │           └── department: "Production"
+  │
+users/
+  └── {userId}
+      ├── email: "user@company.com"
+      ├── displayName: "John Doe"
+      ├── role: "supervisor"
+      └── companyAccess: [companyId1, companyId2]
+```
+
+## 🚀 Installation & Setup
+
+### Prerequisites
+- Node.js 16+
+- Firebase project (free tier available)
+
+### Steps
+
+1. **Clone Repository**
 ```bash
-# Clone the repository
 git clone https://github.com/yogeshwaydande87/PRODUCUTION-SLIP.git
-
-# Navigate to the project directory
 cd PRODUCUTION-SLIP
+```
 
-# Install dependencies
+2. **Install Dependencies**
+```bash
 npm install
-# or
-yarn install
 ```
 
-## Running Locally
+3. **Setup Firebase**
+   - Go to [firebase.google.com](https://firebase.google.com)
+   - Create new project
+   - Enable Firestore Database (test mode)
+   - Enable Authentication (Email/Password + Google)
+   - Copy credentials to `.env.local`
 
 ```bash
-# Start the development server
+cp .env.example .env.local
+```
+
+Edit `.env.local` with your Firebase config:
+```
+REACT_APP_FIREBASE_API_KEY=your_key
+REACT_APP_FIREBASE_AUTH_DOMAIN=your_domain
+REACT_APP_FIREBASE_PROJECT_ID=your_project
+REACT_APP_FIREBASE_STORAGE_BUCKET=your_bucket
+REACT_APP_FIREBASE_MESSAGING_SENDER_ID=your_sender
+REACT_APP_FIREBASE_APP_ID=your_app_id
+```
+
+4. **Run Development Server**
+```bash
 npm start
-# or
-yarn start
-
-# Open browser and navigate to http://localhost:3000
 ```
 
-## Building for Production
-
+5. **Build for Production**
 ```bash
-# Create optimized production build
 npm run build
-# or
-yarn build
-
-# The build folder is ready to be deployed
 ```
 
-## Deployment
-
-This application is ready for deployment on:
+## 🌐 Deployment
 
 ### Vercel (Recommended)
-```bash
-npm i -g vercel
-vercel
-```
-Or connect your GitHub repository directly at [vercel.com](https://vercel.com)
 
-### Netlify
-1. Connect your GitHub repository
-2. Set build command: `npm run build`
-3. Set publish directory: `build`
+1. Push code to GitHub
+2. Go to [vercel.com](https://vercel.com)
+3. Import your GitHub repository
+4. Add environment variables from `.env.local`
+5. Click Deploy ✨
 
-### GitHub Pages
+### Self-Hosted
+
 ```bash
-npm install gh-pages --save-dev
 npm run build
-npm run deploy
+# Deploy 'build' folder to your server
 ```
 
-## Project Structure
+## 📝 Demo Credentials
 
 ```
-src/
-├── components/
-│   ├── ProductionForm.js       # Form to add new slips
-│   ├── ProductionForm.css
-│   ├── ProductionList.js       # List view of all slips
-│   ├── ProductionList.css
-│   ├── ProductionItem.js       # Individual slip item
-│   └── ProductionItem.css
-├── App.js                      # Main App component
-├── App.css                     # App styles
-├── index.js                    # React entry point
-└── index.css                   # Global styles
-public/
-├── index.html                  # HTML template
-└── manifest.json               # PWA manifest
+Email: demo@company.com
+Password: Demo123!
 ```
 
-## Usage
+## 🔐 Firebase Security Rules
 
-1. **Add a Slip**: Fill in the form with product details and click "Add Slip"
-2. **Edit a Slip**: Click the edit button on any slip to modify its details
-3. **Delete a Slip**: Click the delete button to remove a slip
-4. **View Stats**: Check the statistics section to see an overview
+```javascript
+// Firestore Rules (add to Firebase Console)
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    match /companies/{companyId}/** {
+      allow read, write: if request.auth.uid in get(/databases/$(database)/documents/users/$(request.auth.uid)).data.companyAccess;
+    }
+    match /users/{userId} {
+      allow read: if request.auth.uid == userId;
+    }
+  }
+}
+```
 
-## License
+## 📊 Typical Workflow
 
-MIT License - feel free to use this project for personal or commercial purposes.
+### Super Admin
+1. Login → Create new company
+2. Invite company administrators
+3. Monitor all company metrics
 
-## Author
+### Company Supervisor
+1. Login → Select company from dropdown
+2. Create production batch
+3. Assign SKUs and workers
+4. Monitor progress on dashboard
 
-**Yogesh Waydande** - [GitHub Profile](https://github.com/yogeshwaydande87)
+### Workers
+1. Login → View assigned batches
+2. Update quantity/timing as production progresses
+3. Mark batch complete when done
+
+### End of Day
+1. Supervisor generates production report
+2. Download Excel for management review
+3. System maintains complete audit trail
+
+## 🎨 Design Philosophy
+
+- **Clean & Professional** - Enterprise-grade interface
+- **Color-Coded Status** - Visual clarity for batch states
+- **Mobile-First** - Works perfectly on phones and tablets
+- **Data Isolation** - Each company's data completely separate
+- **Scalable** - Designed to handle thousands of companies
+
+## 📱 Responsive Design
+
+- **Desktop (1024px+)** - Full sidebar + content
+- **Tablet (768px+)** - Optimized layouts
+- **Mobile (<768px)** - Hamburger menu + stacked cards
+
+## 🐛 Troubleshooting
+
+### Firebase Connection Issues
+- Verify `.env.local` configuration
+- Check Firebase security rules
+- Ensure Firestore is in test mode initially
+
+### Build Errors
+- Delete `node_modules` and reinstall: `npm install`
+- Clear cache: `npm cache clean --force`
+- Check Node.js version: `node --version` (should be 16+)
+
+## 📞 Support
+
+For issues or feature requests, create an issue on GitHub.
+
+## 📄 License
+
+MIT License - Free for personal and commercial use.
 
 ---
 
-**🚀 Ready to Deploy!**
-
-This application is fully configured and ready for production deployment. Simply push to your hosting provider and it will automatically build and deploy!
+**Built for multi-company manufacturing operations** ⚙️
